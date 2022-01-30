@@ -7,8 +7,8 @@ export default function Header() {
   return (
     <a href="/" /*target="_blank" rel="noopener noreferrer"*/>
       <PageHeader
-        title="Lossless capital effecient Lotto "
-        subTitle="forkable Ethereum dev stack focused on fast product iteration"
+        title="Loseless "
+        subTitle="Lossless capital effecient Lotto"
         style={{ cursor: "pointer" }}
       />
     </a>

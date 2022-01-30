@@ -485,32 +485,7 @@ console.log("test132 address " + address);
   let faucetHint = "";
   const faucetAvailable = localProvider && localProvider.connection && targetNetwork.name.indexOf("local") !== -1;
 
-  const [faucetClicked, setFaucetClicked] = useState(false);
-  if (
-    !faucetClicked &&
-    localProvider &&
-    localProvider._network &&
-    localProvider._network.chainId === 31337 &&
-    yourLocalBalance &&
-    ethers.utils.formatEther(yourLocalBalance) <= 0
-  ) {
-    faucetHint = (
-      <div style={{ padding: 16 }}>
-        <Button
-          type="primary"
-          onClick={() => {
-            faucetTx({
-              to: address,
-              value: ethers.utils.parseEther("10"),
-            });
-            setFaucetClicked(true);
-          }}
-        >
-          💰 Grab funds from the faucet ⛽️
-        </Button>
-      </div>
-    );
-  }
+  //const [faucetClicked, setFaucetClicked] = useState(false);
 
   return (
     <div className="App">
@@ -744,19 +719,13 @@ console.log("test132 address " + address);
           logoutOfWeb3Modal={logoutOfWeb3Modal}
           blockExplorer={blockExplorer}
         />
-        {faucetHint}
       </div>
 
       <div style={{ marginTop: 32, opacity: 0.5 }}>
         {/* Add your address here */}
-        Created by <Address value={"Your...address"} ensProvider={mainnetProvider} fontSize={16} />
+        Created by BryptoAlex
       </div>
 
-      <div style={{ marginTop: 32, opacity: 0.5 }}>
-        <a target="_blank" style={{ padding: 32, color: "#000" }} href="https://github.com/scaffold-eth/scaffold-eth">
-          🍴 Fork me!
-        </a>
-      </div>
 
       {/* 🗺 Extra UI like gas price, eth price, faucet, and support: */}
       <div style={{ position: "fixed", textAlign: "left", left: 0, bottom: 20, padding: 10 }}>

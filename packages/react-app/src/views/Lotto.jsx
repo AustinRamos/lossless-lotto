@@ -253,44 +253,8 @@ console.log("test99 address: " + address);
 
 
         </div>
-        {/*
-        <Divider />
-        Your Address:
-        <Address address={address} ensProvider={mainnetProvider} fontSize={16} />
-        <Divider />
-      
-        ENS Address Example:
-        <Address
-          address="0x34aA3F359A9D614239015126635CE7732c18fDF3" 
-          ensProvider={mainnetProvider}
-          fontSize={16}
-        />
-        */}
-
-        <Divider />
-        {/* use utils.formatEther to display a BigNumber: */}
-        <h2>Your Balance: {yourLocalBalance ? utils.formatEther(yourLocalBalance) : "..."}</h2>
-        <div>OR</div>
-        <Balance address={address} provider={localProvider} price={price} />
-        <Divider />
-        {/*
-        <div>🐳 Example Whale Balance:</div>
-        <Balance balance={utils.parseEther("1000")} provider={localProvider} price={price} />
-        <Divider />
-        <h2>Your Balance: {yourLocalBalance ? utils.formatEther(yourLocalBalance) : "..."}</h2>
-        <Divider />
-        */}
-        Your Contract Address:
-        <Address
-          address={readContracts && readContracts.Lotto ? readContracts.Lotto.address : null}
-          ensProvider={mainnetProvider}
-          fontSize={16}
-        />
-
-        <Divider />
-        
        
-  
+      
       </div>
           
       <div style={{ width: 500, margin: "auto", marginTop: 64 }}>
