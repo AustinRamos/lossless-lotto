@@ -21,7 +21,7 @@ import {
 import { useEventListener } from "eth-hooks/events/useEventListener";
 import { useExchangeEthPrice } from "eth-hooks/dapps/dex";
 // import Hints from "./Hints";
-import { ExampleUI, Hints, Subgraph, Lotto, StakerUI } from "./views";
+import { ExampleUI, Hints, Subgraph, Lotto, StakerUI,LottoController } from "./views";
 import externalContracts from "./contracts/external_contracts";
 
 import deployedContracts from "./contracts/hardhat_contracts.json";
@@ -283,6 +283,10 @@ function App(props) {
 
   // ** 📟 Listen for broadcast events
   const stakeEvents = useEventListener(readContracts, "Staker", "Stake", localProvider, 1);
+
+  const newLottoStarted = useEventListener(readContracts, "LottoController", "lottoStarted");
+
+
   console.log("📟 stake events:", stakeEvents);
 
   // ** keep track of a variable from the contract in the local React state:
@@ -294,13 +298,23 @@ function App(props) {
     console.log("⏳ Lotto timeLeft:", timeLeft);
 
     const totalEntries = useContractReader(readContracts, "Lotto", "totalEntries");
-    const hasLottoStarted = useContractReader(readContracts, "Lotto", "hasStarted");
-    const lottoHasStartedEvent = useEventListener(readContracts, "Lotto", "lotteryHasStarted", localProvider, 1);
+    //const lottoHasStartedEvent = useEventListener(readContracts, "LottoController", "lotteryHasStarted", localProvider, 1);
+    
+    const numOfLottos = useContractReader(readContracts, "LottoController", "counter");
+
+    /* USECONTRACTREADER
+     * readcontracts
+ * @param contractName contractName
+ * @param functionName functionName
+ * @param functionArgs arguments to functions
+    */
 
     const ethInLotto = useContractReader(readContracts, "Lotto", "treasury"); // pehaps this not necessarty either.. 
 console.log("test132 address " + address);
-  console.log("📟 lotto events:", lottoHasStartedEvent);
 
+   const existing_lottos = useContractReader(readContracts, "LottoController", "lotto_contracts", [1]); 
+   console.log(" 13t counter: " + numOfLottos);
+    console.log(" 13t existing_lottos: " + existing_lottos);
 
   // ** Listen for when the contract has been 'completed'
   const complete = useContractReader(readContracts, "ExampleExternalContract", "completed");
@@ -502,6 +516,16 @@ console.log("test132 address " + address);
               }}
               to="/"
             >
+              Home
+            </Link>
+          </Menu.Item>
+          <Menu.Item key="/lotto">
+            <Link
+              onClick={() => {
+                setRoute("/lotto");
+              }}
+              to="/lotto"
+            >
               lotto
             </Link>
           </Menu.Item>
@@ -517,7 +541,7 @@ console.log("test132 address " + address);
             </Link>
           </Menu.Item>
 
-          <Menu.Item key="/exampleui">
+          {/* <Menu.Item key="/exampleui">
           <Link 
           onClick={() => {
             setRoute("/exampleui");
@@ -526,7 +550,7 @@ console.log("test132 address " + address);
           >
             ExampleUI
           </Link>
-        </Menu.Item>
+        </Menu.Item> */}
 
           <Menu.Item key="/contracts">
             <Link
@@ -542,6 +566,24 @@ console.log("test132 address " + address);
 
         <Switch>
           <Route exact path="/">
+          <LottoController
+            address={address}
+            userSigner={userSigner}
+            mainnetProvider={mainnetProvider}
+            localProvider={localProvider}
+            yourLocalBalance={yourLocalBalance}
+            price={price}
+            tx={tx}
+            writeContracts={writeContracts}
+            readContracts={readContracts}
+            lotto_timeLeft={lotto_timeLeft}
+            totalEntries={totalEntries}
+            ethInLotto={ethInLotto}
+            newLottoStarted={newLottoStarted}
+            numOfLottos={numOfLottos}
+          />
+          </Route>
+          <Route exact path="/lotto">
           <Lotto
             address={address}
             userSigner={userSigner}
@@ -553,101 +595,12 @@ console.log("test132 address " + address);
             writeContracts={writeContracts}
             readContracts={readContracts}
             lotto_timeLeft={lotto_timeLeft}
-            hasLottoStarted = {hasLottoStarted}
             totalEntries={totalEntries}
-            lottoHasStartedEvent={lottoHasStartedEvent}
             ethInLotto={ethInLotto}
+            newLottoStarted={newLottoStarted}
           />
-            {/* 
-            {completeDisplay}
-
-            <div style={{ padding: 8, marginTop: 32 }}>
-              <div>Staker Contract:</div>
-              <Address value={readContracts && readContracts.Staker && readContracts.Staker.address} />
-            </div>
-
-            <div style={{ padding: 8, marginTop: 32 }}>
-              <div>Timeleft:</div>
-              {timeLeft && humanizeDuration(timeLeft.toNumber() * 1000)}
-            </div>
-
-            <div style={{ padding: 8 }}>
-              <div>Total staked:</div>
-              <Balance balance={stakerContractBalance} fontSize={64} />/<Balance balance={threshold} fontSize={64} />
-            </div>
-
-            <div style={{ padding: 8 }}>
-              <div>You staked:</div>
-              <Balance balance={balanceStaked} fontSize={64} />
-            </div>
-
-            <div style={{ padding: 8 }}>
-              <Button
-                type={"default"}
-                onClick={() => {
-                  tx(writeContracts.Staker.execute());
-                }}
-              >
-                📡 Execute!
-              </Button>
-            </div>
-
-            <div style={{ padding: 8 }}>
-              <Button
-                type={"default"}
-                onClick={() => {
-                  tx(writeContracts.Staker.withdraw(address));
-                }}
-              >
-                🏧 Withdraw
-              </Button>
-            </div>
-
-            <div style={{ padding: 8 }}>
-              <Button
-                type={balanceStaked ? "success" : "primary"}
-                onClick={() => {
-                  tx(writeContracts.Staker.stake({ value: ethers.utils.parseEther("0.5") }));
-                }}
-              >
-                🥩 Stake 0.5 ether!
-              </Button>
-            </div>
-
-            {/*
-                🎛 this scaffolding is full of commonly used components
-                this <Contract/> component will automatically parse your ABI
-                and give you a form to interact with it locally
-            */}
-{/*
-            <div style={{ width: 500, margin: "auto", marginTop: 64 }}>
-              <div>Stake Events:</div>
-              <List
-                dataSource={stakeEvents}
-                renderItem={item => {
-                  return (
-                    <List.Item key={item.blockNumber}>
-                      <Address value={item.args[0]} ensProvider={mainnetProvider} fontSize={16} /> 
-                      <Balance balance={item.args[1]} />
-                    </List.Item>
-                  );
-                }}
-              />
-            </div>
-  
-  </Switch>
-            {/* uncomment for a second contract:
-            <Contract
-              name="SecondContract"
-              signer={userProvider.getSigner()}
-              provider={localProvider}
-              address={address}
-              blockExplorer={blockExplorer}
-              contractConfig={contractConfig}
-            />
-            */} 
           </Route>
-
+{/* 
           <Route path="/exampleui">
           <ExampleUI
             address={address}
@@ -665,6 +618,7 @@ console.log("test132 address " + address);
             Cin
           />
         </Route>
+        */}
         <Route path="/stakerui">
           <StakerUI
      completeDisplay={completeDisplay}
@@ -693,6 +647,14 @@ console.log("test132 address " + address);
             />
             <Contract
               name="ExampleExternalContract"
+              signer={userSigner}
+              provider={localProvider}
+              address={address}
+              blockExplorer={blockExplorer}
+              contractConfig={contractConfig}
+            />
+             <Contract
+              name="LottoController"
               signer={userSigner}
               provider={localProvider}
               address={address}

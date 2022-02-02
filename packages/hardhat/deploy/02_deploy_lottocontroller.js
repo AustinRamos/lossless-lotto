@@ -7,8 +7,11 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   const { deployer } = await getNamedAccounts();
 
   const exampleExternalContract = await deployments.get("ExampleExternalContract");
+//  const exampleExternalContract = await deployments.get("Lotto");
 
-  await deploy("Lotto", {
+
+
+  await deploy("LottoController", {
     // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
     from: deployer,
     //args: [ exampleExternalContract.address ],
@@ -47,4 +50,4 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   });
   */
 };
-module.exports.tags = ["Lotto"];
+module.exports.tags = ["LottoController"];

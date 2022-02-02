@@ -1,10 +1,10 @@
-pragma solidity ^0.8.4;
+pragma solidity 0.8.4;
 //pragma solidity 0.8.4;
 //pragma solidity ^0.8.0;
 
 import "hardhat/console.sol";
 import "./ExampleExternalContract.sol";
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+//import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 //import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 //import "./SafeMath.sol";
 

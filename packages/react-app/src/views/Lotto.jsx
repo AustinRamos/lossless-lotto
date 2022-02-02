@@ -15,14 +15,14 @@ export default function Lotto({
   readContracts,
   writeContracts,
   lotto_timeLeft,
-  hasLottoStarted,
   totalEntries,
-  lottoHasStartedEvent,
   ethInLotto,
+  newLottoStarted
 }) {
   const [newPurpose, setNewPurpose] = useState("loading...");
-  //const lottostartupdate = useEventListener(readContracts,contractName,"lotteryHasStarted",props.localProvider,1);
-  //lottostartupdate.
+  
+    //so.. is there a way to have a specific Lotto object or something like useContractReader("LottoController, contracts(1)")
+   // console.log("readContracts.Lotto: " + readContracts.LottoController.contracts);
 
   return (
  
@@ -31,6 +31,7 @@ export default function Lotto({
       
       <div style={{ border: "1px solid #cccccc", padding: 16, width: 400, margin: "auto", marginTop: 64 }}>
         <h2>Welcome to the Lottery:</h2>
+        {/*<h2>isActive: {hasLottoStarted} </h2> **how to see if a particular lotto in the contracts array is active? */}
         <h2>Total Entries: {parseInt(totalEntries)}</h2>
         <h2>Eth in pool: {/*utils.formatUnits(ethInLotto.toString(),"eth")*/}</h2>
         <Divider />
@@ -42,84 +43,6 @@ export default function Lotto({
               <div>Timeleft:</div>
               {lotto_timeLeft && humanizeDuration(lotto_timeLeft.toNumber() * 1000)}
             </div>
-{
-  //perhaps need event to do this?
-  //or some if condition so that it only shows if the bool is
-}
-          {/* <div style={{ width: 500, margin: "auto", marginTop: 64 }}>
-              <div>Lotto Events:</div>
-              <List
-                dataSource={lottoHasStartedEvent}
-                renderItem={item => {
-                  return (
-                    //BUT WAIT... why is TimeLEFT not need an event? anyways.,maybe i just messed up first
-                    <List.Item key={item.blockNumber}>
-                      lottery length: {item.args[0]}
-                      lottery length: {item.args[1]}
-                      Has Started: {hasLottoStarted}
-                    </List.Item>
-                  );
-                }}
-              />
-            </div> */}
-
-            {/* <div style={{ padding: 8, marginTop: 32 }}>
-              <div> hasStarted: {hasLottoStarted}</div>
-       
-              <div> time: {lotto_timeLeft}</div>
-             
-            </div> */}
-
-<Button
-            style={{ marginTop: 8 }}
-            
-              onClick={async () => {
-                const hasStarted = await readContracts.Lotto.hasStarted();
-                console.log("test123 hasStarted: " + hasStarted);
-               if(!hasStarted){
-
-               const result = tx( writeContracts.Lotto.startLottery({}));
-  
-               console.log("test123 awaiting metamask/web3 confirm result...", result);
-               console.log(await result);
-               console.log(result);
-               }else{
-                alert("test123 Lotto already started!");
-                <div style={{ zIndex: 2, position: "absolute", right: 0, top: 60, padding: 16 }}>
-          <Alert
-                 message="Lottery has already started."
-                 description={
-                   <div>
-                     you must create another lottery or wait until this one is done.
-                   </div>
-                 }
-                 type="error"
-                 closable={false}
-               />
-        </div>
-                 
-                 console.log("test123 ALREADY STARTED");
-               }
-      
-            var lengthOfLottery, lotteryEndTime;
-
-  
-            
-           // console.log("lotto * ENDTIME* :" +lotteryEndTime);
-            
-            //console.log("EVENT HAS FIRED LOTTO STARTED ")
-           
-              // var formattedlengtOfLottery = new Date(lengthOfLottery*1000);
-              // var formattedlotteryEndTime = new Date(lotteryEndTime*1000);
-              // console.log("FORMATTED*******");
-              //       console.log("formatteed date: " + formattedlengtOfLottery.toLocaleString);
-              //    console.log("lengthOfLottery: " + formattedlotteryEndTime.toLocaleString);
-                 //try the other toLocaleDate/Time options..
-            }}
-            
-          >
-            Start Lotto!
-          </Button>
          
     
               
@@ -206,21 +129,7 @@ console.log("test99 address: " + address);
             Enter Lotto!
           </Button>
             <br/>
-          <Button
-            style={{ marginTop: 8 }}
-            onClick={async () => {
-              /* look how you call setPurpose on your contract: */
-              /* notice how you pass a call back for tx updates too */
-
-                
-
-
-              console.log("awaiting metamask/web3 confirm result...", result);
-              console.log(await result);
-            }}
-          > 
-            Pick Winner!
-          </Button>
+          
           <br/>
           <Button
             style={{ marginTop: 8 }}
@@ -258,9 +167,9 @@ console.log("test99 address: " + address);
       </div>
           
       <div style={{ width: 500, margin: "auto", marginTop: 64 }}>
-              <div>Lotto Events:</div>
+              <div>new lotto started</div>
               <List
-                dataSource={lottoHasStartedEvent}
+                dataSource={newLottoStarted}
                 renderItem={item => { 
                   const val = item.hasStarted;
                   const val2 = item.args[0];
